@@ -1,0 +1,119 @@
+:root {
+  --color-bg: gray;
+  --color-fg: #1a1a1a;
+  --color-accent: #0066cc;
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", monospace;
+  --space-unit: 8px;
+  --radius: 4px;
+}
+.content {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rating-0 {
+  --color: #2b0a27;
+}
+.rating-1 {
+  --color: #451010;
+}
+.rating-2 {
+  --color: #922323;
+}
+.rating-3 {
+  --color: #c53030;
+}
+.rating-4 {
+  --color: #c53030;
+}
+.rating-5 {
+  --color: #c53030;
+}
+.rating-6 {
+  --color: #dd6b20;
+}
+.rating-7 {
+  --color: #f6e05e;
+  color: #333;
+}
+
+.rating-8 {
+  --color: #48bb78;
+}
+.rating-9 {
+  --color: #2f855a;
+}
+.rating-10 {
+  --color: #4caf50;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+.episodes {
+  display: grid;
+  place-items: start;
+  place-content: center;
+}
+
+.season-header,
+.episode {
+  --size: 2rem;
+  width: var(--size);
+  height: var(--size);
+  background-color: var(--color);
+  display: grid;
+  place-items: center;
+  margin: 2px;
+  border-radius: 25px;
+  corner-shape: squircle;
+  color: #fff;
+}
+
+.season-header {
+  color: black;
+}
+
+.season {
+  display: flex;
+}
