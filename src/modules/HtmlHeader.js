@@ -1,17 +1,26 @@
 import { infoMovie } from "../services/api";
 
-export const getHtmlHeader = () => {
-  const header = document.querySelector("header");
+export class HtmlHeaderTvShows extends HTMLElement {
+  data = {};
 
-  //Creación de la etiqueta img
-  const imgShow = document.createElement("img");
-  imgShow.classList.add("poster");
-  imgShow.src = infoMovie.image;
-  header.append(imgShow);
+  constructor() {
+    super();
+    this.init();
+  }
 
-  //Creación de la etiqueta h1.
-  const titleShow = document.createElement("h1");
-  titleShow.classList.add("title-show");
-  titleShow.textContent = infoMovie.name;
-  header.append(titleShow);
-};
+  init() {
+    this.data = infoMovie;
+    this.render();
+  }
+
+  render() {
+    this.setHTMLUnsafe(/*html*/ `
+    <header>
+      <img class="poster" src="${this.data.image}" />
+      <h1>
+          ${this.data.name}
+      </h1>
+    </header>
+`);
+  }
+}
