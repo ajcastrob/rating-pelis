@@ -3,7 +3,7 @@ import { standardCssModules } from "vite-plugin-standard-css-modules";
 
 export default defineConfig({
   root: "src",
-  base: "/01-promise/",
+  base: "/rating-pelis/",
   publicDir: "../public",
   plugins: [standardCssModules()],
   server: { port: 1234 },
