@@ -1,39 +1,43 @@
 import { infoEpisodes } from "../services/api.js";
 
-const createEpisodeHtml = (episode) => {
-  return episode.map((item) => {
-    const div = document.createElement("div");
+export class SeasonTvShows extends HTMLElement {
+  data = {};
 
-    div.classList.add(
-      "episode",
-      `episode-${item.number}`,
-      `rating-${Math.floor(item.rating.average)}`,
+  constructor() {
+    super();
+    this.init();
+  }
+
+  init() {
+    this.data = infoEpisodes;
+  }
+
+  connectedCallback() {
+    const html = Object.values(this.data).map((season, index) =>
+      this.getSeason(season, index + 1),
     );
+    this.render(html.join(""));
+  }
 
-    div.textContent = item.number;
+  render(html) {
+    this.setHTMLUnsafe(html);
+  }
 
-    return div;
-  });
-};
+  getSeason(season, index) {
+    const html = `<section class="season">
+        <header class="season-header">T${index}</header>
+        ${this.createEpisode(season).join("")}
+        </section>        
+        `;
+    return html;
+  }
 
-function createSeasonHtml(data, number) {
-  const seasonDiv = document.createElement("article");
-
-  seasonDiv.classList.add("season");
-
-  const headerEpisode = document.createElement("header");
-  headerEpisode.classList.add("season-header");
-  headerEpisode.textContent = `T${number}`;
-  seasonDiv.append(headerEpisode);
-
-  const episodes = createEpisodeHtml(data);
-  episodes.forEach((element) => seasonDiv.append(element));
-
-  return seasonDiv;
+  createEpisode(episode) {
+    return episode.map((item) => {
+      const div = `
+      <div class="episode episode-${item.number} rating-${Math.floor(item.rating.average)}">${item.number}</div>
+      `;
+      return div;
+    });
+  }
 }
-
-const list = Object.values(infoEpisodes).map((season, index) =>
-  createSeasonHtml(season, index + 1),
-);
-
-export default list;

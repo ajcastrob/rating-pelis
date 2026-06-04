@@ -1,6 +1,6 @@
-import { HtmlHeaderTvShows } from "./modules/HtmlHeader";
-import list from "./modules/HtmlTvShow";
+import { HtmlHeaderTvShows } from "./modules/HtmlHeader"
+import { SeasonTvShows } from "./modules/HtmlTvShow";
 
 customElements.define("header-tv-show", HtmlHeaderTvShows);
-const episodes = document.querySelector(".episodes");
-episodes.append(...list);
+customElements.define("season-tv", SeasonTvShows);
+
