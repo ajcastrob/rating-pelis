@@ -12,18 +12,27 @@ export class HtmlHeaderTvShows extends HTMLElement {
   }
 
   init() {
-    this.data = infoMovie;
+    this.data = this.obtaintvShowInfo(infoMovie);
     this.render();
   }
 
+  obtaintvShowInfo(infoTv) {
+    return {
+      image: infoTv?.image,
+      name: infoTv?.name,
+    };
+  }
+
   render() {
-    this.shadowRoot.setHTMLUnsafe(/*html*/ `
+    const error = `<div class="warning-badge" data-info="pulsing">No se encontró película</div>`;
+    const headerTvShow = `
     <header>
       <img class="poster" src="${this.data.image}" />
       <h1>
           ${this.data.name}
       </h1>
     </header>
-`);
+`;
+    this.shadowRoot.setHTMLUnsafe(this.data.name ? headerTvShow : error);
   }
 }

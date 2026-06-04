@@ -23,7 +23,6 @@
   --color: #f6e05e;
   color: #333;
 }
-
 .rating-8 {
   --color: #48bb78;
 }
@@ -52,10 +51,6 @@
   border-radius: 25px;
   corner-shape: squircle;
   color: #fff;
-}
-
-.season-header {
-  color: black;
 }
 
 .season {

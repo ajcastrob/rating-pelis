@@ -6,7 +6,6 @@ const getShowData = async (id) => {
   const URL = `${URL_API}/${id}`;
   try {
     const response = await fetch(URL);
-    if (!response.ok) return;
 
     const data = await response.json();
 
@@ -44,7 +43,7 @@ const getEpisodeList = async (id) => {
   }
 };
 
-const infoMovie = (await getShowData(ID)) ?? "Valor por defecto";
-const infoEpisodes = (await getEpisodeList(ID)) ?? "Valor por defecto";
+const infoMovie = (await getShowData(ID)) ?? null;
+const infoEpisodes = (await getEpisodeList(ID)) ?? null;
 
 export { infoEpisodes, infoMovie };

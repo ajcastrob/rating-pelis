@@ -16,9 +16,11 @@ export class SeasonTvShows extends HTMLElement {
   }
 
   connectedCallback() {
+    if (!this.data) return;
     const html = Object.values(this.data).map((season, index) =>
       this.getSeason(season, index + 1),
     );
+
     this.render(html.join(""));
   }
 
