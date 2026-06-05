@@ -9,20 +9,25 @@ export class SeasonTvShows extends HTMLElement {
     this.shadowRoot.adoptedStyleSheets.push(styles);
   }
 
-
-
+  checkData() {
+    return !this.data
+      ? ""
+      : Object.values(this.data).map((season, index) =>
+          this.getSeason(season, index + 1),
+        );
+  }
 
   update(episodes) {
-    this.data = episodes
-    const html = Object.values(this.data).map((season, index) =>
-      this.getSeason(season, index + 1),
-    );
+    this.data = episodes;
 
-    this.render(html.join(""));
+    const html = this.checkData();
+
+    this.render(html);
   }
 
   render(html) {
-    this.shadowRoot.setHTMLUnsafe(html);
+    const htmlRender = html ? html.join("") : "";
+    this.shadowRoot.setHTMLUnsafe(htmlRender);
   }
 
   getSeason(season, index) {

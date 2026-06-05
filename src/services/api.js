@@ -1,8 +1,8 @@
-const PLACEHOLDER_IMAGE = "htpps://placehold.co/210x295";
-const URL_API = "https://api.tvmaze.com/search/shows?q=";
-
 export const getShowData = async (id) => {
+  const PLACEHOLDER_IMAGE = "htpps://placehold.co/210x295";
+  const URL_API = "https://api.tvmaze.com/search/shows?q=";
   const URL = `${URL_API}${id}`;
+
   try {
     const response = await fetch(URL);
 
@@ -15,7 +15,7 @@ export const getShowData = async (id) => {
       image: data.show.image?.medium ?? PLACEHOLDER_IMAGE,
     };
   } catch (error) {
-    console.error(`Hubo un error: ${error}`);
+    return null;
   }
 };
 
@@ -40,6 +40,6 @@ export const getEpisodeList = async (id) => {
     );
     return episodeListBySeson;
   } catch (error) {
-    console.error(error);
+    return null;
   }
 };
