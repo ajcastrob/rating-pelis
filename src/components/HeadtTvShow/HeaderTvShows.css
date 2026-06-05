@@ -19,6 +19,7 @@ h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   cursor: pointer;
   position: relative;
   z-index: 10;
@@ -73,12 +74,6 @@ h1 {
     corner-shape: bevel;
     border-radius: 0.5rem;
   }
-}
-
-@property --scan-pos {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
 }
 
 @keyframes scan-move {

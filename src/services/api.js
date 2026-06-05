@@ -1,25 +1,26 @@
-const ID = "123";
 const PLACEHOLDER_IMAGE = "htpps://placehold.co/210x295";
-const URL_API = "https://api.tvmaze.com/shows";
+const URL_API = "https://api.tvmaze.com/search/shows?q=";
 
-const getShowData = async (id) => {
-  const URL = `${URL_API}/${id}`;
+export const getShowData = async (id) => {
+  const URL = `${URL_API}${id}`;
   try {
     const response = await fetch(URL);
 
-    const data = await response.json();
+    const data = (await response.json())[0];
 
     return {
-      name: data.name,
-      rating: data.rating,
-      image: data.image?.medium ?? PLACEHOLDER_IMAGE,
+      id: data.show.id,
+      name: data.show.name,
+      rating: data.show.rating,
+      image: data.show.image?.medium ?? PLACEHOLDER_IMAGE,
     };
   } catch (error) {
     console.error(`Hubo un error: ${error}`);
   }
 };
 
-const getEpisodeList = async (id) => {
+export const getEpisodeList = async (id) => {
+  const URL_API = "https://api.tvmaze.com/shows";
   const URL = `${URL_API}/${id}/episodes`;
 
   try {
@@ -42,8 +43,3 @@ const getEpisodeList = async (id) => {
     console.error(error);
   }
 };
-
-const infoMovie = (await getShowData(ID)) ?? null;
-const infoEpisodes = (await getEpisodeList(ID)) ?? null;
-
-export { infoEpisodes, infoMovie };

@@ -1,4 +1,3 @@
-import { infoEpisodes } from "../../services/api.js";
 import styles from "./SeasonTvShows.css" with { type: "css" };
 
 export class SeasonTvShows extends HTMLElement {
@@ -8,15 +7,13 @@ export class SeasonTvShows extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.adoptedStyleSheets.push(styles);
-    this.init();
   }
 
-  init() {
-    this.data = infoEpisodes;
-  }
 
-  connectedCallback() {
-    if (!this.data) return;
+
+
+  update(episodes) {
+    this.data = episodes
     const html = Object.values(this.data).map((season, index) =>
       this.getSeason(season, index + 1),
     );

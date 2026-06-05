@@ -1,4 +1,3 @@
-import { infoMovie } from "../../services/api.js";
 import styles from "./HeaderTvShows.css" with { type: "css" };
 
 export class HtmlHeaderTvShows extends HTMLElement {
@@ -8,19 +7,19 @@ export class HtmlHeaderTvShows extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.adoptedStyleSheets.push(styles);
-    this.init();
   }
 
-  init() {
-    this.data = this.obtaintvShowInfo(infoMovie);
-    this.render();
-  }
-
-  obtaintvShowInfo(infoTv) {
+  obtaintvShowInfo(infoTv){
     return {
       image: infoTv?.image,
       name: infoTv?.name,
-    };
+    }
+  }
+
+
+  update(infoTv) {
+    this.data = this.obtaintvShowInfo(infoTv)
+    this.render()
   }
 
   render() {
