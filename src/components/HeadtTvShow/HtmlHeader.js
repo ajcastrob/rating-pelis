@@ -9,17 +9,16 @@ export class HtmlHeaderTvShows extends HTMLElement {
     this.shadowRoot.adoptedStyleSheets.push(styles);
   }
 
-  obtaintvShowInfo(infoTv){
+  obtaintvShowInfo(infoTv) {
     return {
       image: infoTv?.image,
       name: infoTv?.name,
-    }
+    };
   }
 
-
   update(infoTv) {
-    this.data = this.obtaintvShowInfo(infoTv)
-    this.render()
+    this.data = this.obtaintvShowInfo(infoTv);
+    this.render();
   }
 
   render() {
