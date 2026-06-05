@@ -3,14 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>01-promise</title>
-    <script type="module" crossorigin src="/rating-pelis/assets/index-QDUGvGZ9.js"></script>
-    <link rel="stylesheet" crossorigin href="/rating-pelis/assets/index-DL4lbQNn.css">
+    <title>Rating pelis</title>
+    <script type="module" crossorigin src="/rating-pelis/assets/index-DnsgXAOb.js"></script>
+    <link rel="stylesheet" crossorigin href="/rating-pelis/assets/index-V9jeMgrx.css">
   </head>
   <body>
     <div class="content">
-      <header></header>
-      <article class="episodes"></article>
+      <form class="form">
+        <div class="container-form">
+          <input
+            type="text"
+            name="name"
+            required
+            placeholder="Star Wars, Lost, Friends..."
+          />
+          <button class="btn-search" type="submit"></button>
+        </div>
+      </form>
+
+      <header-tv-show></header-tv-show>
+      <season-tv class="episodes"></season-tv>
     </div>
   </body>
 </html>
