@@ -1,4 +1,24 @@
-img {
+:host {
+  display: block;
+  min-height: 345px;
+  contain: layout;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 345px;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.poster {
+  width: 210px;
+  height: 295px;
+  aspect-ratio: 210 / 295;
+  background-color: #1a1a2e;
+  object-fit: cover;
   border-radius: 10px;
 }
 

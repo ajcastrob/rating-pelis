@@ -25,12 +25,13 @@ export class HtmlHeaderTvShows extends HTMLElement {
     const error = `<div class="warning-badge" data-info="pulsing">No se encontró película</div>`;
     const headerTvShow = `
     <header>
-      <img class="poster" src="${this.data.image}" />
+      <img class="poster" width="210" height="295" decoding="async" alt="Póster de ${this.data.name}" src="${this.data.image}" />
       <h1>
           ${this.data.name}
       </h1>
     </header>
 `;
-    this.shadowRoot.setHTMLUnsafe(this.data.name ? headerTvShow : error);
+    const content = this.data.name ? headerTvShow : error;
+    this.shadowRoot.setHTMLUnsafe(`<div class="wrapper">${content}</div>`);
   }
 }
