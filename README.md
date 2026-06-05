@@ -34,17 +34,17 @@ Pensada como ejercicio práctico dentro del curso de **asincronía** de [ManzDev
 
 ## Stack tecnológico
 
-| Área                | Tecnología                                          |
-| ------------------- | --------------------------------------------------- |
-| Lenguaje            | JavaScript (ES2024)                                 |
-| Build / dev server  | [Vite 8](https://vitejs.dev/)                       |
-| Empaquetado CSS     | [Lightning CSS](https://lightningcss.dev/)         |
-| CSS Modules         | `vite-plugin-standard-css-modules`                  |
-| Componentes         | Web Components nativos (Custom Elements + Shadow DOM) |
-| API externa         | [TVMaze API](https://www.tvmaze.com/api)            |
-| Linter              | [oxlint](https://oxc.rs/) + `oxlint-plugin-complexity` |
-| Gestor de paquetes  | [pnpm](https://pnpm.io/) 11.x                       |
-| Despliegue          | GitHub Pages (`gh-pages`)                           |
+| Área               | Tecnología                                             |
+| ------------------ | ------------------------------------------------------ |
+| Lenguaje           | JavaScript (ES2024)                                    |
+| Build / dev server | [Vite 8](https://vitejs.dev/)                          |
+| Empaquetado CSS    | [Lightning CSS](https://lightningcss.dev/)             |
+| CSS Modules        | `vite-plugin-standard-css-modules`                     |
+| Componentes        | Web Components nativos (Custom Elements + Shadow DOM)  |
+| API externa        | [TVMaze API](https://www.tvmaze.com/api)               |
+| Linter             | [oxlint](https://oxc.rs/) + `oxlint-plugin-complexity` |
+| Gestor de paquetes | [pnpm](https://pnpm.io/) 11.x                          |
+| Despliegue         | GitHub Pages (`gh-pages`)                              |
 
 ## Requisitos previos
 
@@ -74,13 +74,13 @@ Abre `http://localhost:1234/` en el navegador y empieza a escribir nombres de se
 
 ### Comandos disponibles
 
-| Comando       | Descripción                                                                 |
-| ------------- | --------------------------------------------------------------------------- |
-| `pnpm dev`    | Inicia el servidor de desarrollo de Vite en `http://localhost:1234`.        |
-| `pnpm build`  | Genera la build de producción en `dist/`.                                   |
-| `pnpm preview`| Sirve la build de producción localmente para verificar el resultado.        |
-| `pnpm deploy` | Publica el contenido de `dist/` en la rama `gh-pages` del repositorio.      |
-| `pnpm lint`   | Ejecuta `oxlint` sobre todo el código del proyecto.                         |
+| Comando        | Descripción                                                            |
+| -------------- | ---------------------------------------------------------------------- |
+| `pnpm dev`     | Inicia el servidor de desarrollo de Vite en `http://localhost:1234`.   |
+| `pnpm build`   | Genera la build de producción en `dist/`.                              |
+| `pnpm preview` | Sirve la build de producción localmente para verificar el resultado.   |
+| `pnpm deploy`  | Publica el contenido de `dist/` en la rama `gh-pages` del repositorio. |
+| `pnpm lint`    | Ejecuta `oxlint` sobre todo el código del proyecto.                    |
 
 ## Estructura del proyecto
 
@@ -163,7 +163,7 @@ La aplicación sigue un patrón **clásico de tres capas** totalmente en cliente
 - **API pública**: `update(infoTv)` con `{ name, image, rating }`.
 - **Comportamiento**:
   - Si recibe datos válidos → renderiza `<header>` con `<img>` y `<h1>`.
-  - Si recibe `null` o sin `name` → renderiza un *warning-badge* con un haz de escaneo animado.
+  - Si recibe `null` o sin `name` → renderiza un _warning-badge_ con un haz de escaneo animado.
 - **Encapsulación**: Shadow DOM abierto + `adoptedStyleSheets` con `HeaderTvShows.css`.
 
 ### `<season-tv>` (`src/components/SeasonTvShow/HtmlTvShow.js`)
@@ -185,13 +185,13 @@ La aplicación sigue un patrón **clásico de tres capas** totalmente en cliente
 Dos funciones asíncronas, ambas tolerantes a fallos (devuelven `null` ante cualquier error):
 
 ```js
-getShowData(id)        // -> { id, name, rating, image } | null
-getEpisodeList(id)     // -> { [seasonNumber]: Episode[] } | null
+getShowData(id); // -> { id, name, rating, image } | null
+getEpisodeList(id); // -> { [seasonNumber]: Episode[] } | null
 ```
 
 - `getShowData` consulta `https://api.tvmaze.com/search/shows?q={query}` y se queda con el **primer resultado**.
 - `getEpisodeList` consulta `https://api.tvmaze.com/shows/{id}/episodes` y agrupa los episodios por temporada usando `Object.groupBy`.
-- Si la serie no tiene imagen, se usa un placeholder en `PLACEHOLDER_IMAGE` (ojo: en el código aparece como `htpps://placehold.co/210x295`, con una `p` de más; corrígelo si quieres que cargue la imagen de respaldo).
+- Si la serie no tiene imagen, se usa un placeholder en `PLACEHOLDER_IMAGE`.
 
 ## Estilos
 
@@ -223,7 +223,7 @@ pnpm build
 pnpm deploy
 ```
 
-El script `deploy` usa `gh-pages -d dist`, que sube el contenido de `dist/` a la rama `gh-pages` del remoto configurado (`origin`). Asegúrate de tener permisos de *push* sobre el repositorio.
+El script `deploy` usa `gh-pages -d dist`, que sube el contenido de `dist/` a la rama `gh-pages` del remoto configurado (`origin`). Asegúrate de tener permisos de _push_ sobre el repositorio.
 
 En la configuración del repositorio, en **Settings → Pages**, selecciona la rama `gh-pages` y la raíz (`/`) como fuente.
 
@@ -233,21 +233,21 @@ El proyecto **no utiliza variables de entorno**: no hay claves, tokens ni config
 
 ## Solución de problemas
 
-| Problema                                              | Causa probable                                          | Solución                                                                              |
-| ----------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| El servidor de dev no arranca en el puerto 1234       | Puerto ocupado                                          | Cambia `server.port` en `vite.config.js` o libera el puerto.                          |
-| `pnpm install` falla con errores de resolución        | Versión antigua de pnpm o `node_modules` previo         | Usa Node 20+ y `pnpm@11`, después `rm -rf node_modules && pnpm install`.              |
-| `pnpm dev` muestra pantalla en blanco                 | Bloqueador de scripts del navegador                     | Revisa la consola y permite módulos ES / fetch desde `localhost`.                     |
-| La búsqueda siempre devuelve "No se encontró película"| API sin conexión, o serie con nombre incorrecto         | Verifica la pestaña *Network* y prueba con un nombre exacto (`lost`, `friends`...). |
-| No se ven los colores del heatmap                     | `rating.average` es `null` para algún episodio          | La clase `rating-0` aplica un color por defecto oscuro, pero conviene revisar datos. |
-| El placeholder de imagen no carga                     | El literal contiene un `htpps://` con una `p` extra     | Corrige la constante `PLACEHOLDER_IMAGE` en `src/services/api.js`.                   |
-| `pnpm deploy` falla con 403                           | `gh-pages` no tiene permisos de push                    | Revisa `git remote -v` y tus credenciales SSH/HTTPS.                                 |
-| `oxlint` se queja por complejidad cognitiva           | Funciones con demasiadas ramas                          | Divide la función en helpers más pequeños.                                            |
+| Problema                                               | Causa probable                                      | Solución                                                                             |
+| ------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| El servidor de dev no arranca en el puerto 1234        | Puerto ocupado                                      | Cambia `server.port` en `vite.config.js` o libera el puerto.                         |
+| `pnpm install` falla con errores de resolución         | Versión antigua de pnpm o `node_modules` previo     | Usa Node 20+ y `pnpm@11`, después `rm -rf node_modules && pnpm install`.             |
+| `pnpm dev` muestra pantalla en blanco                  | Bloqueador de scripts del navegador                 | Revisa la consola y permite módulos ES / fetch desde `localhost`.                    |
+| La búsqueda siempre devuelve "No se encontró película" | API sin conexión, o serie con nombre incorrecto     | Verifica la pestaña _Network_ y prueba con un nombre exacto (`lost`, `friends`...).  |
+| No se ven los colores del heatmap                      | `rating.average` es `null` para algún episodio      | La clase `rating-0` aplica un color por defecto oscuro, pero conviene revisar datos. |
+| El placeholder de imagen no carga                      | El literal contiene un `htpps://` con una `p` extra | Corrige la constante `PLACEHOLDER_IMAGE` en `src/services/api.js`.                   |
+| `pnpm deploy` falla con 403                            | `gh-pages` no tiene permisos de push                | Revisa `git remote -v` y tus credenciales SSH/HTTPS.                                 |
+| `oxlint` se queja por complejidad cognitiva            | Funciones con demasiadas ramas                      | Divide la función en helpers más pequeños.                                           |
 
 ## Créditos y licencia
 
 - Código y diseño del proyecto: [ajcastrob](https://github.com/ajcastrob).
 - Datos de series: [TVMaze API](https://www.tvmaze.com/api) — usados bajo sus términos.
-- Curso de referencia: *Asincronía* de [ManzDev](https://manz.dev/).
+- Curso de referencia: _Asincronía_ de [ManzDev](https://manz.dev/).
 
 Licencia **ISC** (la indicada en `package.json`).

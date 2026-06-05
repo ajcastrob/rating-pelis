@@ -1,5 +1,5 @@
 export const getShowData = async (id) => {
-  const PLACEHOLDER_IMAGE = "htpps://placehold.co/210x295";
+  const PLACEHOLDER_IMAGE = "https://placehold.co/210x295";
   const URL_API = "https://api.tvmaze.com/search/shows?q=";
   const URL = `${URL_API}${id}`;
 
