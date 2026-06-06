@@ -38,7 +38,7 @@ export class FormTvShow extends HTMLElement {
   }
 
   render() {
-    const html = `<form class="form">
+    const html = /*html*/ `<form class="form">
         <div class="container-form">
           <input
             type="text"

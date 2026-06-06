@@ -1,0 +1,27 @@
+.nav__principal {
+  background-color: transparent;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  .div-nav {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.nav__social {
+  ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+  }
+
+  img {
+    width: 30px;
+    height: 40px;
+    color: white;
+  }
+}
