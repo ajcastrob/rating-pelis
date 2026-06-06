@@ -12,25 +12,124 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 345px;
   padding: 1rem;
   box-sizing: border-box;
 }
 
-.poster {
+.card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-6);
+  align-items: center;
+  max-width: 640px;
+  width: 100%;
+  animation: card-fade-in var(--dur-slow) var(--ease-mech) both;
+}
+
+/* ─── Poster ──────────────────────────────────────── */
+
+.card__poster {
+  width: 210px;
+  flex-shrink: 0;
+}
+
+.card__img {
+  display: block;
   width: 210px;
   height: 295px;
   aspect-ratio: 210 / 295;
-  background-color: #1a1a2e;
   object-fit: cover;
-  border-radius: 10px;
+  border: var(--border-w) solid var(--border);
+  box-shadow: 6px 6px 0 var(--accent);
+  filter: contrast(1.05) saturate(0.95);
+  background-color: var(--surface);
 }
 
-h1 {
-  --color: white;
-  --size: 2rem;
+/* ─── Info column ─────────────────────────────────── */
 
-  color: var(--color);
-  font-size: var(--size);
-  text-align: center;
+.card__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.card__channel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.card__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--fg);
+  margin: 0;
+  word-break: break-word;
+}
+
+.card__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: var(--border-w) solid var(--border);
+}
+
+.card__rating-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-right: var(--space-1);
+}
+
+.card__rating-value {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--accent-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.card__rating-max {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  color: var(--muted);
+}
+
+/* ─── Animations ──────────────────────────────────── */
+
+@keyframes card-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Responsive ──────────────────────────────────── */
+
+@media (width < 640px) {
+  .card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: var(--space-4);
+  }
+  .card__info { align-items: center; }
+  .card__title { font-size: clamp(1.75rem, 7vw, 2.5rem); }
 }
