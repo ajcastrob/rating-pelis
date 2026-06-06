@@ -41,12 +41,6 @@
   --color: #4caf50;
 }
 
-.episodes {
-  display: grid;
-  place-items: start;
-  place-content: center;
-}
-
 .season-header,
 .episode {
   --size: 2rem;
@@ -62,5 +56,38 @@
 }
 
 .season {
-  display: flex;
+  @media (width < 640px) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-bottom: 25px;
+  }
+  @media (width >=640px) and (width <= 1024px) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (width > 1024) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-content: start;
+    place-items: center;
+  }
+}
+
+.season-header {
+  grid-area: 1 / 1 / 1 / 5;
+  justify-self: center;
+  align-self: center;
+}
+
+episode {
+  display: grid;
+  place-items: start;
+  place-content: center;
+
+  @media (width >=640px) and (width <= 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 20px;
+  }
 }
