@@ -27,29 +27,35 @@ export class FormTvShow extends HTMLElement {
 
       const options = {
         detail: { name: name.trim() },
-        bubles: true,
+        bubbles: true,
         composed: true,
       };
 
-      const event = new CustomEvent("formtvshow: send", options);
-      this.dispatchEvent(event);
+      this.dispatchEvent(new CustomEvent("formtvshow: send", options));
       e.target.reset();
     });
   }
 
   render() {
-    const html = /*html*/ `<form class="form">
-        <div class="container-form">
+    const html = /*html*/ `
+      <form class="form">
+        <div class="form__row">
+          <span class="form__prefix" aria-hidden="true">▸ CH</span>
           <input
+            class="form__input"
             type="text"
             name="name"
             required
-            placeholder="Star Wars, Lost, Friends..."
+            placeholder="star wars, lost, friends..."
+            aria-label="Nombre de la serie"
           />
-          <button class="btn-search" type="submit"></button>
+          <button class="form__submit" type="submit">
+            <span class="form__submit-label">SCAN</span>
+            <span class="form__submit-icon" aria-hidden="true">▶</span>
+          </button>
         </div>
       </form>
-`;
+    `;
     this.shadowRoot.setHTMLUnsafe(html);
   }
 }

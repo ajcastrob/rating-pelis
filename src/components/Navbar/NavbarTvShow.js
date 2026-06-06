@@ -24,7 +24,7 @@ export class NavbarTvShow extends HTMLElement {
 
         <a href="https://github.com/ajcastrob/rating-pelis" class="nav__brand" aria-label="Rating Pelis — repositorio">
           <img src="./logo.svg" alt="" class="nav__logo-mark" />
-          <span class="nav__wordmark">Rating.Pelis</span>
+          <span class="nav__wordmark">Rating.TVSHOW</span>
         </a>
 
         <div class="nav__status" aria-live="polite">
