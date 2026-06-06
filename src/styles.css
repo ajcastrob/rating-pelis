@@ -1,29 +1,60 @@
 :root {
-  --color-bg: #224;
-  --color-fg: #1a1a1a;
-  --color-accent: #0066cc;
-  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, "Cascadia Code", monospace;
-  --space-unit: 8px;
-  --radius: 4px;
+  /* ─── Color tokens ─────────────────────────────── */
+  --bg: #0a0a0a; /* Negro CRT profundo */
+  --fg: #f4f1e8; /* Off-white cálido, no blanco puro */
+  --accent: #ff6b35; /* Naranja phosphor / construcción */
+  --accent-2: #ffd60a; /* Amarillo TV (reusa del badge) */
+  --surface: #171717; /* Tarjetas y superficies elevadas */
+  --border: #2a2a2a; /* Líneas técnicas */
+  --grid-line: #1f1f1f; /* Cuadrícula de fondo */
+  --muted: #6b6b6b; /* Texto secundario */
+  --scan: rgba(255, 107, 53, 0.08); /* Resplandor ámbar */
 
-  /* /// Breakpoints map */
+  /* ─── Typography ───────────────────────────────── */
+  --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --fs-display: clamp(3rem, 8vw, 6rem);
+  --fs-h1: clamp(2.5rem, 5vw, 4rem);
+  --fs-h2: clamp(1.5rem, 3vw, 2.25rem);
+  --fs-body: 1rem;
+  --fs-mono: 0.875rem;
+  --fs-micro: 0.75rem;
+
+  --lh-tight: 1;
+  --lh-snug: 1.25;
+  --lh-normal: 1.5;
+
+  /* ─── Spacing (4px base) ──────────────────────── */
+  --space-1: 0.25rem; /*  4px */
+  --space-2: 0.5rem; /*  8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.5rem; /* 24px */
+  --space-6: 2rem; /* 32px */
+  --space-7: 3rem; /* 48px */
+  --space-8: 4rem; /* 64px */
+
+  /* ─── Geometry ─────────────────────────────────── */
+  --radius-sharp: 0; /* Brutalist: no rounding */
+  --radius-soft: 2px; /* Solo sutileza en tarjetas */
+  --border-w: 2px; /* Grosor estándar de borde */
+  --border-w-thick: 3px; /* Bordes principales */
+  --nav-h: 64px; /* Altura de la navbar sticky */
+
+  /* ─── Motion ───────────────────────────────────── */
+  --ease-mech: cubic-bezier(0.7, 0, 0.3, 1); /* Mecánica, no orgánica */
+  --ease-step: steps(8); /* Para efectos discretos */
+  --dur-fast: 120ms;
+  --dur-base: 240ms;
+  --dur-slow: 480ms;
+
+  /* ─── Breakpoints (compat) ─────────────────────── */
   --bp-tablet: 768px;
   --bp-tablet-horizontal: 1024px;
   --bp-desktop: 1200px;
   --bp-desktop-xl: 1440px;
   --bp-desktop-primary: 1900px;
-}
-.content {
-  margin-top: 50px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-  max-width: 800px;
-  display: flex;
-  gap: 20px;
-  flex-direction: column;
-  align-items: center;
 }
 
 *,
@@ -38,15 +69,67 @@
 }
 
 html {
-  font-family: var(--font-sans);
-  line-height: 1.5;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: var(--lh-normal);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  color-scheme: dark;
 }
 
 body {
   min-height: 100dvh;
-  background: var(--color-bg);
-  color: var(--color-fg);
+  background:
+    /* scanlines horizontales (1px cada 3px) */
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 2px,
+      rgba(255, 255, 255, 0.025) 2px,
+      rgba(255, 255, 255, 0.025) 3px
+    ),
+    /* cuadrícula vertical */
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    /* cuadrícula horizontal */
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px),
+    /* vignette: oscurece los bordes */
+    radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.5) 100%),
+    var(--bg);
+  background-size:
+    100% 3px,
+    32px 32px,
+    32px 32px,
+    100% 100%,
+    100% 100%;
+  background-attachment: fixed;
+  color: var(--fg);
+  font-family: var(--font-mono);
+}
+
+body::before {
+  content: "OFF AIR";
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(10rem, 30vw, 30rem);
+  color: var(--fg);
+  opacity: 0.03;
+  letter-spacing: -0.02em;
+  transform: rotate(-8deg);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* El contenido real va por encima de la marca de agua */
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 img,
@@ -70,6 +153,25 @@ select {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 0%;
+}
+
+.content {
+  margin: var(--nav-h) auto var(--space-8);
+  width: 100%;
+  max-width: 960px;
+  padding: var(--space-5) var(--space-5) 0;
+  display: flex;
+  gap: var(--space-6);
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (width < 640px) {
+  .content {
+    margin-top: var(--nav-h);
+    padding: var(--space-4) var(--space-4) 0;
+    gap: var(--space-5);
+  }
 }
 
 form-tv-show {
