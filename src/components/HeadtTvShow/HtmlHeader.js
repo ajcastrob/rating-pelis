@@ -16,14 +16,17 @@ export class HtmlHeaderTvShows extends HTMLElement {
     };
   }
 
+  hide() {
+    this.hidden = true;
+  }
+
   update(infoTv) {
     this.data = this.obtaintvShowInfo(infoTv);
     this.render();
   }
 
   render() {
-    const error = `<div class="warning-badge" data-info="pulsing">No se encontró película</div>`;
-    const headerTvShow = `
+    const headerTvShow = /*html*/ `
     <header>
       <img class="poster" width="210" height="295" decoding="async" alt="Póster de ${this.data.name}" src="${this.data.image}" />
       <h1>
@@ -31,7 +34,7 @@ export class HtmlHeaderTvShows extends HTMLElement {
       </h1>
     </header>
 `;
-    const content = this.data.name ? headerTvShow : error;
-    this.shadowRoot.setHTMLUnsafe(`<div class="wrapper">${content}</div>`);
+    this.shadowRoot.setHTMLUnsafe(`<div class="wrapper">${headerTvShow}</div>`);
+    this.hidden = false;
   }
 }

@@ -1,3 +1,11 @@
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
 .rating-0 {
   --color: #2b0a27;
 }

@@ -9,6 +9,10 @@ export class SeasonTvShows extends HTMLElement {
     this.shadowRoot.adoptedStyleSheets.push(styles);
   }
 
+  hide() {
+    this.hidden = true;
+  }
+
   checkData() {
     return !this.data
       ? ""
@@ -28,6 +32,7 @@ export class SeasonTvShows extends HTMLElement {
   render(html) {
     const htmlRender = html ? html.join("") : "";
     this.shadowRoot.setHTMLUnsafe(htmlRender);
+    this.hidden = false;
   }
 
   getSeason(season, index) {

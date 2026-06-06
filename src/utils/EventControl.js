@@ -6,6 +6,7 @@ export class EvenControl {
     this.headerEl = document.querySelector("header-tv-show");
     this.seasonEl = document.querySelector("season-tv");
     this.formTvShow = document.querySelector("form-tv-show");
+    this.badgeAlert = document.querySelector("badge-alert");
 
     this.init();
   }
@@ -20,7 +21,16 @@ export class EvenControl {
     const movie = await getShowData(name.toLowerCase());
     const episodes = await getEpisodeList(movie ? movie.id : null);
 
-    this.headerEl.update(movie);
-    this.seasonEl.update(episodes);
+    if (movie) {
+      this.headerEl.update(movie);
+      this.seasonEl.update(episodes);
+
+      this.badgeAlert.hide();
+    } else {
+      this.headerEl.hide();
+      this.seasonEl.hide();
+
+      this.badgeAlert.show(`No se encontró ${name}`);
+    }
   }
 }

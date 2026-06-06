@@ -65,8 +65,6 @@ select {
   initial-value: 0%;
 }
 
-header-tv-show,
-season-tv,
 form-tv-show {
   display: block;
 }
