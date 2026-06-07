@@ -9,11 +9,10 @@ export class BadgeAlert extends HTMLElement {
   }
 
   show(message) {
-    const badge = this.shadowRoot.querySelector(".warning-badge");
-    if (badge) {
-      badge.textContent = message;
+    const msg = this.shadowRoot.querySelector("[data-message]");
+    if (msg) {
+      msg.textContent = message;
     }
-
     this.hidden = false;
   }
 
@@ -22,8 +21,15 @@ export class BadgeAlert extends HTMLElement {
   }
 
   render() {
-    const html = /*html*/ `<div class="warning-badge" role="status" data-info="pulsing">No se encontró TvShow</div>`;
-    this.shadowRoot.setHTMLUnsafe(`<div class="wrapper">${html}</div>`);
+    const html = /*html*/ `
+      <div class="wrapper">
+        <div class="warning-badge" role="status" data-info="pulsing">
+          <span class="warning-badge__code">ERR 404 · NO SIGNAL</span>
+          <span class="warning-badge__msg" data-message>No se encontró TvShow</span>
+        </div>
+      </div>
+    `;
+    this.shadowRoot.setHTMLUnsafe(html);
     this.hidden = true;
   }
 }
