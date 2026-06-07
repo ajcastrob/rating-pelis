@@ -189,17 +189,3 @@ header-tv-show {
 season-tv {
   min-height: 200px;
 }
-
-season-tv.episodes:not([hidden]) {
-  @media (width >=640px) and (width <= 1024px) {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0 15px;
-  }
-
-  @media (width > 1024) {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 15px 30px;
-  }
-}

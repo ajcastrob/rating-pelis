@@ -13,43 +13,83 @@ export class SeasonTvShows extends HTMLElement {
     this.hidden = true;
   }
 
-  checkData() {
-    return !this.data
-      ? ""
-      : Object.values(this.data).map((season, index) =>
-          this.getSeason(season, index + 1),
-        );
-  }
-
   update(episodes) {
     this.data = episodes;
-
-    const html = this.checkData();
-
-    this.render(html);
+    this.render();
   }
 
-  render(html) {
-    const htmlRender = html ? html.join("") : "";
-    this.shadowRoot.setHTMLUnsafe(htmlRender);
+  render() {
+    const seasons = this.data ? this.checkData() : [];
+    const seasonsHtml = seasons.length
+      ? `<div class="seasons">${seasons.join("")}</div>`
+      : "";
+    const legendHtml = seasons.length ? this.renderLegend() : "";
+    this.shadowRoot.setHTMLUnsafe(`${seasonsHtml}${legendHtml}`);
     this.hidden = false;
   }
 
-  getSeason(season, index) {
-    const html = `<section class="season">
-        <header class="season-header">T${index}</header>
-        ${this.createEpisode(season).join("")}
-        </section>        
-        `;
-    return html;
+  checkData() {
+    return Object.values(this.data).map((season, index) =>
+      this.getSeason(season, index + 1),
+    );
   }
 
-  createEpisode(episode) {
-    return episode.map((item) => {
-      const div = `
-      <div class="episode episode-${item.number} rating-${Math.floor(item.rating.average)}">${item.number}</div>
+  getSeason(season, index) {
+    const seasonNum = season[0]?.season ?? index;
+    const seasonLabel =
+      seasonNum === 0
+        ? "SPECIALS"
+        : `SEASON ${String(seasonNum).padStart(2, "0")}`;
+    const episodeCount = season.length;
+    const rated = season.filter((ep) => ep.rating?.average != null);
+    const avg = rated.length
+      ? rated.reduce((s, ep) => s + ep.rating.average, 0) / rated.length
+      : null;
+    const avgText = avg !== null ? `AVG ${avg.toFixed(1)}` : "AVG —";
+
+    return `
+      <section class="season">
+        <header class="season__header">
+          <h2 class="season__title">▮ ${seasonLabel}</h2>
+          <div class="season__stats">
+            <span class="season__count">${episodeCount} EP</span>
+            <span class="season__sep" aria-hidden="true">/</span>
+            <span class="season__avg">${avgText}</span>
+          </div>
+        </header>
+        <div class="season__grid">
+          ${this.createEpisode(season, seasonNum).join("")}
+        </div>
+      </section>
+    `;
+  }
+
+  createEpisode(episode, seasonNum) {
+    return episode.map((item, i) => {
+      const r = item.rating?.average;
+      const ratingClass = r != null ? `rating-${Math.floor(r)}` : "rating-na";
+      const ratingText = r != null ? r.toFixed(1) : "—";
+      const seasonText = String(seasonNum).padStart(2, "0");
+      const numText = String(item.number ?? 0).padStart(2, "0");
+      return `
+        <div class="episode ${ratingClass}" style="--i: ${i}" tabindex="0" aria-label="Season ${seasonNum} episode ${item.number}, rating ${ratingText} of 10">
+          <span class="episode__num">${numText}</span>
+          <span class="episode__tip" aria-hidden="true">S${seasonText} · E${numText} · ${ratingText}/10</span>
+        </div>
       `;
-      return div;
     });
+  }
+
+  renderLegend() {
+    return `
+      <footer class="legend">
+        <span class="legend__caption">SCALE 0—10</span>
+        <div class="legend__bar" aria-hidden="true">
+          <span class="legend__marker" style="left: 0%">0</span>
+          <span class="legend__marker" style="left: 50%">5</span>
+          <span class="legend__marker" style="left: 100%">10</span>
+        </div>
+      </footer>
+    `;
   }
 }
