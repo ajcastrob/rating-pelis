@@ -18,12 +18,26 @@ export class SeasonTvShows extends HTMLElement {
     this.render();
   }
 
-  render() {
-    const seasons = this.data ? this.checkData() : [];
-    const seasonsHtml = seasons.length
+  getSeasonLengthHtml(seasons, seasonLength) {
+    const seasonsHtml = seasonLength
       ? `<div class="seasons">${seasons.join("")}</div>`
       : "";
-    const legendHtml = seasons.length ? this.renderLegend() : "";
+    return seasonsHtml;
+  }
+
+  obtainLegendHtml(seasonLength) {
+    const legendHtml = seasonLength ? this.renderLegend() : "";
+    return legendHtml;
+  }
+
+  render() {
+    const seasons = this.data ? this.checkData() : [];
+    const seasonLength = seasons.length;
+
+    const seasonsHtml = this.getSeasonLengthHtml(seasons, seasonLength);
+
+    const legendHtml = this.obtainLegendHtml(seasonLength);
+
     this.shadowRoot.setHTMLUnsafe(`${seasonsHtml}${legendHtml}`);
     this.hidden = false;
   }
@@ -34,18 +48,32 @@ export class SeasonTvShows extends HTMLElement {
     );
   }
 
-  getSeason(season, index) {
-    const seasonNum = season[0]?.season ?? index;
+  obtainSeaonLabel(numberSeasons) {
     const seasonLabel =
-      seasonNum === 0
+      numberSeasons === 0
         ? "SPECIALS"
-        : `SEASON ${String(seasonNum).padStart(2, "0")}`;
-    const episodeCount = season.length;
+        : `SEASON ${String(numberSeasons).padStart(2, "0")}`;
+
+    return seasonLabel;
+  }
+
+  obtainAverageRating(season) {
     const rated = season.filter((ep) => ep.rating?.average != null);
     const avg = rated.length
       ? rated.reduce((s, ep) => s + ep.rating.average, 0) / rated.length
       : null;
     const avgText = avg !== null ? `AVG ${avg.toFixed(1)}` : "AVG —";
+
+    return avgText;
+  }
+
+  getSeason(season, index) {
+    const seasonNum = season[0]?.season ?? index;
+    const episodeCount = season.length;
+
+    const seasonLabel = this.obtainSeaonLabel(seasonNum);
+
+    const avgText = this.obtainAverageRating(season);
 
     return `
       <section class="season">
