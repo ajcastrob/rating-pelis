@@ -42,7 +42,7 @@ export class NavbarTvShow extends HTMLElement {
             </a>
           </li>
           <li>
-            <a href="#" class="nav__social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/in/josé-castro-b600791a4/" class="nav__social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="${LINKEDIN_PATH}"></path>
               </svg>
