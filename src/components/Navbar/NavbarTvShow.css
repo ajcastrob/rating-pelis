@@ -168,13 +168,19 @@
 /* ─── Responsive ────────────────────────────────── */
 
 @media (width < 768px) {
-  .nav__status { display: none; }
+  .nav__status {
+    display: none;
+  }
   .nav__inner {
     grid-template-columns: 1fr auto 1fr;
     gap: var(--space-3);
   }
-  .nav__brand { justify-self: center; }
-  .nav__social { justify-self: end; }
+  .nav__brand {
+    justify-self: center;
+  }
+  .nav__social {
+    justify-self: end;
+  }
 }
 
 @media (width < 480px) {
@@ -182,7 +188,9 @@
     display: none;
   }
   .nav__inner {
-    padding: 0 var(--space-3);
+    display: flex;
+    gap: 90px;
+    justify-content: space-evenly;
   }
   .nav__social-link {
     width: 36px;
