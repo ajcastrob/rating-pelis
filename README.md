@@ -12,6 +12,7 @@ Pensada como ejercicio práctico dentro del curso de **asincronía** de [ManzDev
 - [Puesta en marcha](#puesta-en-marcha)
 - [Estructura del proyecto](#estructura-del-proyecto)
 - [Arquitectura y flujo de datos](#arquitectura-y-flujo-de-datos)
+  - [Comunicación por eventos](#comunicación-por-eventos)
 - [Componentes](#componentes)
 - [Servicios](#servicios)
 - [Estilos](#estilos)
@@ -24,7 +25,8 @@ Pensada como ejercicio práctico dentro del curso de **asincronía** de [ManzDev
 ## Características
 
 - 🔎 **Búsqueda de series** por nombre contra la API de TVMaze.
-- 🧱 **Web Components** nativos (sin frameworks): `<header-tv-show>` y `<season-tv>`.
+- 🧱 **Web Components** nativos (sin frameworks): `<nav-tv-show>`, `<form-tv-show>`, `<header-tv-show>`, `<season-tv>` y `<badge-alert>`.
+- 🔄 **Comunicación entre componentes** mediante `CustomEvent` con `composed: true` para cruzar Shadow DOM.
 - 🎨 **Shadow DOM** con `adoptedStyleSheets` para encapsular estilos.
 - 🌡️ **Mapa de calor** por episodio: el color de cada celda se calcula a partir de la nota media.
 - ⚡ **Asincronía moderna** con `async/await` y `fetch`.
@@ -87,13 +89,27 @@ Abre `http://localhost:1234/` en el navegador y empieza a escribir nombres de se
 ```text
 rating-pelis/
 ├── public/
-│   └── Icon.svg                # Icono de búsqueda (usado por el botón del form)
+│   ├── Icon.svg                # Icono de búsqueda (usado por el botón del form)
+│   ├── github.svg              # Icono de GitHub (navbar)
+│   ├── linkedin.svg            # Icono de LinkedIn (navbar)
+│   ├── logo.svg                # Logo principal
+│   └── logo2.svg               # Logo alternativo
 ├── src/
 │   ├── index.html              # Entrada HTML con el formulario y los custom elements
 │   ├── main.js                 # Registro de custom elements + bootstrap del controlador
 │   ├── styles.css              # Estilos globales y tokens (custom properties, @property)
 │   ├── assets/                 # Recursos estáticos servidos por Vite
 │   ├── components/
+│   │   ├── Navbar/             # <nav-tv-show>: navbar sticky con brand y enlaces sociales
+│   │   │   ├── NavbarTvShow.js
+│   │   │   ├── NavbarTvShow.css
+│   │   │   └── Constants.js
+│   │   ├── FormTvShow/         # <form-tv-show>: formulario de búsqueda
+│   │   │   ├── FormTvShow.js
+│   │   │   └── FormTvShow.css
+│   │   ├── BadgeAlert/         # <badge-alert>: advertencia visual cuando no hay resultados
+│   │   │   ├── BadgeAlert.js
+│   │   │   └── BadgeAlert.css
 │   │   ├── HeadtTvShow/        # <header-tv-show>: cabecera con póster y nombre
 │   │   │   ├── HtmlHeader.js
 │   │   │   └── HeaderTvShows.css
@@ -123,7 +139,7 @@ La aplicación sigue un patrón **clásico de tres capas** totalmente en cliente
 
 ```text
 ┌────────────────────┐    submit     ┌──────────────────────┐
-│ <form class="form">│ ────────────▶ │  EvenControl (utils) │
+│ <form class="form">│ ────────────▶ │ EventControl (utils) │
 └────────────────────┘               └──────────┬───────────┘
                                                 │
                                                 ▼
@@ -149,21 +165,44 @@ La aplicación sigue un patrón **clásico de tres capas** totalmente en cliente
 ### Ciclo de vida de una búsqueda
 
 1. El usuario escribe un nombre y envía el formulario.
-2. `EvenControl.handleEvent` cancela el `submit`, extrae el campo `name` y aborta si está vacío.
+2. `EventControl.handleEvent` cancela el `submit`, extrae el campo `name` y aborta si está vacío.
 3. Llama a `getShowData(name)` → devuelve `{ id, name, rating, image }` o `null`.
 4. Si hay resultado, llama a `getEpisodeList(id)` → agrupa los episodios por temporada con `Object.groupBy`.
 5. Reparte los datos a los dos Web Components mediante sus métodos `update(...)`.
 6. Resetea el formulario.
 
+### Comunicación por eventos
+
+Los componentes se comunican mediante `CustomEvent` con `bubbles: true` y `composed: true`:
+
+1. `<form-tv-show>` emite `formtvshow:send` con el campo `name` en `detail`.
+2. `EventControl.handleEvent()` captura el evento (delegación en `document`).
+3. Tras obtener los datos de la API, llama a `.update()` en `<header-tv-show>` y `<season-tv>`.
+4. Si no hay resultados, oculta los componentes y muestra `<badge-alert>` con el mensaje de error.
+
 ## Componentes
+
+### `<nav-tv-show>` (`src/components/Navbar/NavbarTvShow.js`)
+
+- **Responsabilidad**: navbar sticky con logo, indicador de estado ("CH 00 — STANDBY") y enlaces sociales (GitHub, LinkedIn).
+- **API pública**: sin métodos públicos (render estático al montar).
+- **Comportamiento**: se fija en la parte superior con `position: sticky`. Muestra punto verde de estado "LIVE" y los iconos SVG desde `public/`.
+- **Encapsulación**: Shadow DOM abierto + `adoptedStyleSheets` con `NavbarTvShow.css`.
+
+### `<form-tv-show>` (`src/components/FormTvShow/FormTvShow.js`)
+
+- **Responsabilidad**: formulario de búsqueda con input de texto + botón "SCAN".
+- **API pública**: `reset()` para limpiar el campo tras una búsqueda exitosa.
+- **Comportamiento**: al hacer submit, emite `CustomEvent("formtvshow:send")` con `bubbles: true, composed: true` que captura `EventControl`.
+- **Encapsulación**: Shadow DOM abierto + `adoptedStyleSheets` con `FormTvShow.css`.
 
 ### `<header-tv-show>` (`src/components/HeadtTvShow/HtmlHeader.js`)
 
-- **Responsabilidad**: mostrar el póster y el nombre de la serie.
+- **Responsabilidad**: mostrar el póster, el título y la nota media de la serie.
 - **API pública**: `update(infoTv)` con `{ name, image, rating }`.
 - **Comportamiento**:
-  - Si recibe datos válidos → renderiza `<header>` con `<img>` y `<h1>`.
-  - Si recibe `null` o sin `name` → renderiza un _warning-badge_ con un haz de escaneo animado.
+  - Si recibe datos válidos → renderiza `<header>` con `<img>`, `<h1>` y contador animado de la nota.
+  - Se oculta con `[hidden]` cuando no hay resultados.
 - **Encapsulación**: Shadow DOM abierto + `adoptedStyleSheets` con `HeaderTvShows.css`.
 
 ### `<season-tv>` (`src/components/SeasonTvShow/HtmlTvShow.js`)
@@ -177,6 +216,13 @@ La aplicación sigue un patrón **clásico de tres capas** totalmente en cliente
 - **Encapsulación**: Shadow DOM abierto + `adoptedStyleSheets` con `SeasonTvShows.css`.
 
 > El nombre del elemento es `season-tv` (sin `show`) y se registra en `main.js` con `customElements.define("season-tv", SeasonTvShows)`.
+
+### `<badge-alert>` (`src/components/BadgeAlert/BadgeAlert.js`)
+
+- **Responsabilidad**: mostrar advertencia visual "ERR 404 · NO SIGNAL" cuando no hay resultados.
+- **API pública**: `update(message)` con el texto de error a mostrar.
+- **Comportamiento**: renderiza el badge con animación de línea de escaneo CRT (usando `@property --scan-pos`). Se muestra/oculta con el atributo `[hidden]`.
+- **Encapsulación**: Shadow DOM abierto + `adoptedStyleSheets` con `BadgeAlert.css`.
 
 ## Servicios
 
@@ -196,8 +242,9 @@ getEpisodeList(id); // -> { [seasonNumber]: Episode[] } | null
 ## Estilos
 
 - **Tokens** en `src/styles.css` con `:root` (`--color-bg`, `--color-fg`, `--color-accent`, `--font-sans`, `--font-mono`, `--space-unit`, `--radius`).
+- **Tipografía**: Google Fonts — **Big Shoulders Display** (títulos) y **JetBrains Mono** (código/monospace), cargadas desde `src/index.html`.
 - **Anidamiento CSS nativo** soportado por Lightning CSS (`input { &::placeholder, &:focus, &:active }`).
-- **`@property --scan-pos`** en `src/styles.css` para tipar la propiedad custom que anima el `warning-badge`.
+- **`@property --scan-pos`** en `src/styles.css` para tipar la propiedad custom que anima el `badge-alert`.
 - **CSS por componente** cargado en Shadow DOM mediante `adoptedStyleSheets` y `import ... with { type: "css" }`.
 
 ## Calidad de código (lint)
